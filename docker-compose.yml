@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+  csms:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: sh -c "cd csms/ && gunicorn csms.wsgi:application --bind 0.0.0.0:8000"
+    volumes:
+      - .:/csms
+      - csms_resources_volume:/csms/resources
+    restart: always
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./.env
+
+    container_name: csms_api
+    image: csms:latest
+
+volumes:
+  csms_resources_volume:
+    external: true
